@@ -12,12 +12,12 @@ def run_process_pool():
     start_time = time.time()
     
     with concurrent.futures.ProcessPoolExecutor() as executor:
-        # 1. เปลี่ยนมาเก็บผลลัพธ์ใส่ list (เหมือนที่เราทำใน Threading)
+        # เก็บผลลัพธ์ใส่ list (เหมือนที่เราทำใน Threading)
         results = list(executor.map(calculate, numbers))
         
     duration = time.time() - start_time
     
-    # 2. วนลูปปริ้นผลลัพธ์โชว์ทีละรอบ
+    # วนลูปปริ้นผลลัพธ์โชว์ทีละรอบให้เหมือนกับวิธีอื่น
     for i, res in enumerate(results, 1):
         print(f"รอบที่ {i} -> คำนวณผลรวมเสร็จสิ้น (ตัวเลขยาวมากขอละไว้)")
         

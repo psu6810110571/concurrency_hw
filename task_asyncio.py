@@ -2,12 +2,18 @@ import time
 import asyncio
 import aiohttp
 import sys
+import random
 from bs4 import BeautifulSoup
 
 # ดึงข้อมูล 5 รอบ
 URLS = ["https://www.scrapethissite.com/pages/simple/"] * 5
+# รายชื่อประเทศที่จะให้โปรแกรมสุ่มค้นหา
+TARGET_COUNTRIES = ["Andorra", "Thailand", "Japan"]
 
 async def fetch_async(session, url):
+    # สุ่มเลือก 1 ประเทศจากรายชื่อเป้าหมาย
+    target = random.choice(TARGET_COUNTRIES)
+    
     async with session.get(url) as response:
         html_content = await response.text()
         soup = BeautifulSoup(html_content, 'html.parser')
@@ -15,15 +21,15 @@ async def fetch_async(session, url):
         
         for country in countries:
             name = country.find('h3', class_='country-name').text.strip()
-            if name == "Andorra":
+            if name == target:
                 capital = country.find('span', class_='country-capital').text.strip()
                 population = country.find('span', class_='country-population').text.strip()
                 area = country.find('span', class_='country-area').text.strip()
                 
-                return f"เจอแล้ว! {name} | เมืองหลวง: {capital} | ประชากร: {population} คน | พื้นที่: {area} ตร.กม."
+                return f"สุ่มเจอ! {name} | เมืองหลวง: {capital} | ประชากร: {population} คน | พื้นที่: {area} ตร.กม."
 
 async def run_asyncio_task():
-    print("กำลังเริ่มทำงานแบบ Asyncio (ดึงข้อมูลประเทศ Andorra)...")
+    print("กำลังเริ่มทำงานแบบ Asyncio (ดึงข้อมูลประเทศแบบสุ่ม)...")
     start_time = time.time()
     
     async with aiohttp.ClientSession() as session:
